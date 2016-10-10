@@ -77,9 +77,9 @@ namespace MVCHarjoitusTyö.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(string action, string firstname, string lastname, string phonenumber, string email, string street, string housenumber, string zip, string country)
+        public ActionResult Create(string firstname, string lastname, string phonenumber, string email, string street, string housenumber, string zip, string country)
         {
-            if(action == "save" && firstname != null && lastname != null)
+            if(firstname != null && lastname != null)
             {
                 Contact c = new Contact
                 {

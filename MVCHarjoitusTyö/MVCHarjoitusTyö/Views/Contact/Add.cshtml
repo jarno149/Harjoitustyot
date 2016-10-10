@@ -6,7 +6,40 @@
 
 @model AddViewModel
 
+<style>
+    .error
+    {
+        border: 2px solid red;
+    }
+</style>
+
+<script type="text/javascript">
+    function validate()
+    {
+        var firstname = document.getElementById("firstname").value;
+        var lastname = document.getElementById("lastname").value;
+        alert(firstname + " " + lastname);
+        if (firstname == "" || lastname == "")
+        {
+            alert("Fill all required fields!");
+            firstname.className = "error";
+            lastname.style.borderColor = "red";
+        }
+        else
+        {
+           // document["form"].submit();
+        }
+        return;
+    }
+
+    function cancel()
+    {
+        window.history.back();
+    }
+</script>
+
 <h2>Add contact</h2>
+
 
 <div>
     @using (@Html.BeginForm("Create", "Contact", FormMethod.Post))
@@ -14,13 +47,13 @@
     <table style="margin-left: 15%;">
         <tr><td>
             @Html.Label("Firstname: ")</td><td>
-            <input style="float: right" type="text" placeholder="Firstname" name="firstname" />
+            <input id="firstname" style="float: right" type="text" placeholder="Firstname" name="firstname" />
         </tr>
         <tr><td>
     @Html.Label("Lastname: ")
 </td>
 <td>
-    <input type="text" placeholder="Lastname" name="lastname" />
+    <input id="lastname" type="text" placeholder="Lastname" name="lastname" />
 </tr>
         <tr><td>
     @Html.Label("Phonenumber: ")
@@ -65,10 +98,12 @@
 </tr>
     </table>
         <br />
-        <div style="margin-left: 16%">
-            <input type="submit" value="save" name="action" />
-            <input type="submit" value="cancel" name="action" />
-        </div>
+        
+        
     }
+<div style="margin-left: 16%">
+    <button onclick="validate()">Validate</button>
+    <button onclick="cancel()">Cancel</button>
+</div>
 </div>
 

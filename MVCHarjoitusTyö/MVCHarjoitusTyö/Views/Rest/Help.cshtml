@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "Help";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    table, th, td {
+   border: 1px solid black;
+}
+</style>
+
+<h2>Help</h2>
+
+<table>
+    <col width="160" />
+    <col width="160" />
+    <col width="160" />
+    <col width="160" />
+    <tr>
+        <td><b>Name</b></td>
+        <td><b>Url</b></td>
+        <td><b>Method</b></td>
+        <td><b>Parameters</b></td>
+    </tr>
+    <tr>
+        <td>Get all contacts</td>
+        <td>/rest/getcontacts</td>
+        <td>GET</td>
+        <td>none</td>
+    </tr>
+    <tr>
+        <td>Get contact by id</td>
+        <td>/rest/getcontact</td>
+        <td>GET</td>
+        <td>id</td>
+    </tr>
+    <tr>
+        <td>Delete contact by id</td>
+        <td>/rest/deletecontact</td>
+        <td>DELETE</td>
+        <td>id</td>
+    </tr>
+    <tr>
+        <td>Add new contact</td>
+        <td>/rest/addcontact</td>
+        <td>PUT</td>
+        <td>firstname<br />lastname<br />phonenumber<br />email<br />street<br />housenumber<br />zipcode<br />country</td>
+    </tr>
+    <tr>
+        <td>Update contact</td>
+        <td>/rest/updatecontact</td>
+        <td>UPDATE</td>
+        <td>id<br />firstname<br />lastname<br />phonenumber<br />email<br />street<br />housenumber<br />zipcode<br />country</td>
+    </tr>
+
+
+</table>
+

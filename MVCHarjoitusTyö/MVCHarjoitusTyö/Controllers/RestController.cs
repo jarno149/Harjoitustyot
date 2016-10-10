@@ -79,5 +79,10 @@ namespace MVCHarjoitusTyö.Controllers
             };
             MVCHarjoitusTyö.ObjectModels.Contact.Update(c);
         }
+
+        public ActionResult Help()
+        {
+            return View();
+        }
     }
 }
