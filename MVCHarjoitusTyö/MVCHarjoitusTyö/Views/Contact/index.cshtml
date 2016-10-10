@@ -26,7 +26,7 @@
                     <td>@Html.Label(Model.Contacts.ElementAt(i).LastName)</td>
                     <td>@Html.Label(Model.Contacts.ElementAt(i).PhoneNumber != null ? Model.Contacts.ElementAt(i).PhoneNumber : "")</td>
                     <td>@Html.Label(Model.Contacts.ElementAt(i).Email != null ? Model.Contacts.ElementAt(i).Email : "")</td>
-                    <td>@Html.ActionLink("Edit", "EditContact", Model.Contacts.ElementAt(i).Id)</td>
+                    <td>@Html.ActionLink("Edit", "Edit", "Contact", new { id = Model.Contacts.ElementAt(i).Id }, null) / @Html.ActionLink("Remove", "Remove", "Contact", new { id = Model.Contacts.ElementAt(i).Id }, null)</td>
                 </tr>
             }
         </table>

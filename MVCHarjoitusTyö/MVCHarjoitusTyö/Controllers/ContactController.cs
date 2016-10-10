@@ -13,7 +13,6 @@ namespace MVCHarjoitusTyö.Controllers
         // GET: Contact
         public ActionResult Index()
         {
-
             Contact[] contacts = Contact.GetAll();
 
             IndexViewModel vm = new IndexViewModel()
@@ -21,6 +20,43 @@ namespace MVCHarjoitusTyö.Controllers
                 Contacts = contacts
             };
             return View(vm);
+        }
+
+        public ActionResult Remove(string id)
+        {
+            if(id != null)
+            {
+                Contact.RemoveById(id);
+            }
+            return RedirectToAction("Index");
+        }
+
+        public async System.Threading.Tasks.Task<ActionResult> Edit(string id)
+        {
+            if (id == null)
+                return RedirectToAction("Index");
+
+            Contact c = await Contact.GetByIdAsync(id);
+            if (c == null)
+            {
+                return null;
+            }
+            EditViewModel vm = new EditViewModel
+            {
+                SelectedContact = c
+            };
+
+            return View(vm);
+        }
+
+        public ActionResult Update(string action, string id, string firstname, string lastname, string phonenumber, string email, string street, string housenumber, string zip, string country)
+        {
+            if (action == "Save")
+            {
+                return null;
+            }
+            else
+                return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -54,5 +90,6 @@ namespace MVCHarjoitusTyö.Controllers
             }
             return RedirectToAction("Index");
         }
+
     }
 }

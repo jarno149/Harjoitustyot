@@ -16,4 +16,9 @@ namespace MVCHarjoitusTyö.Models
     {
 
     }
+
+    public class EditViewModel
+    {
+        public Contact SelectedContact { get; set; }
+    }
 }

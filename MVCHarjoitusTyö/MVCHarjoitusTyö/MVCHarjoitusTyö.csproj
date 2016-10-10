@@ -249,6 +249,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Contact\index.cshtml" />
     <Content Include="Views\Contact\Add.cshtml" />
+    <Content Include="Views\Contact\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />

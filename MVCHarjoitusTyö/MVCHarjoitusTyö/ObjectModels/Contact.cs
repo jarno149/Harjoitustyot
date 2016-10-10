@@ -72,6 +72,37 @@ namespace MVCHarjoitusTyö.ObjectModels
                 cc.SaveChanges();
             }
         }
+
+        public static void Remove(Contact c)
+        {
+            using (ContactContext cc = new ContactContext())
+            {
+                cc.Contacts.Remove(c);
+                cc.SaveChanges();
+            }
+        }
+
+        public static async System.Threading.Tasks.Task<Contact> GetByIdAsync(string id)
+        {
+            long lid = long.Parse(id);
+            using (ContactContext cc = new ContactContext())
+            {
+                Contact c = await cc.Contacts.Include(a => a.Address).FirstOrDefaultAsync(x => x.Id == lid);
+                return c;
+            }
+            return null;
+        }
+
+        public static void RemoveById(string id)
+        {
+            long lid = long.Parse(id);
+            using (ContactContext cc = new ContactContext())
+            {
+                Contact c = cc.Contacts.FirstOrDefault(x => x.Id == lid);
+                cc.Contacts.Remove(c);
+                cc.SaveChanges();
+            }
+        }
     }
 
     public class Address
