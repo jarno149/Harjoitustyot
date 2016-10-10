@@ -1,0 +1,74 @@
+﻿@using MVCHarjoitusTyö.Models
+@{
+    ViewBag.Title = "AddView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model AddViewModel
+
+<h2>AddView</h2>
+
+<div>
+    @using (@Html.BeginForm("Create", "Contact", FormMethod.Post))
+    {
+    <table style="margin-left: 15%;">
+        <tr><td>
+            @Html.Label("Firstname: ")</td><td>
+            <input style="float: right" type="text" placeholder="Firstname" name="firstname" />
+        </tr>
+        <tr><td>
+    @Html.Label("Lastname: ")
+</td>
+<td>
+    <input type="text" placeholder="Lastname" name="lastname" />
+</tr>
+        <tr><td>
+    @Html.Label("Phonenumber: ")
+</td>
+<td>
+    <input type="text" placeholder="Phonenumber" name="phonenumber" />
+</tr>
+        <tr><td>
+    @Html.Label("Email: ")
+</td>
+<td>
+    <input type="text" placeholder="email" name="Email" />
+</tr>
+        <tr><td>
+    @Html.Label("Address")
+</td>
+<td>
+</tr>
+        <tr><td>
+    @Html.Label("Streetname: ")
+</td>
+<td>
+    <input type="text" placeholder="Streetname" name="street" />
+</tr>
+        <tr><td>
+    @Html.Label("Housenumber: ")
+</td>
+<td>
+    <input type="text" placeholder="Housenumber" name="housenumber" />
+</tr>
+        <tr><td>
+    @Html.Label("ZIP-code: ")
+</td>
+<td>
+    <input type="text" placeholder="ZIP-code" name="zip" />
+</tr>
+        <tr><td>
+    @Html.Label("Country: ")
+</td>
+<td>
+    <input type="text" placeholder="Country" name="country" />
+</tr>
+    </table>
+        <br />
+        <div style="margin-left: 16%">
+            <input type="submit" value="save" name="action" />
+            <input type="submit" value="cancel" name="action" />
+        </div>
+    }
+</div>
+
