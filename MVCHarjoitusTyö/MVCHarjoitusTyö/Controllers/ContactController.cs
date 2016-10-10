@@ -2,6 +2,7 @@
 using MVCHarjoitusTyö.ObjectModels;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -22,20 +23,14 @@ namespace MVCHarjoitusTyö.Controllers
             return View(vm);
         }
 
-        public ActionResult Remove(string id)
+        public ActionResult Remove(long id)
         {
-            if(id != null)
-            {
-                Contact.RemoveById(id);
-            }
+            Contact.RemoveById(id);
             return RedirectToAction("Index");
         }
 
-        public async System.Threading.Tasks.Task<ActionResult> Edit(string id)
+        public async System.Threading.Tasks.Task<ActionResult> Edit(long id)
         {
-            if (id == null)
-                return RedirectToAction("Index");
-
             Contact c = await Contact.GetByIdAsync(id);
             if (c == null)
             {
@@ -74,9 +69,8 @@ namespace MVCHarjoitusTyö.Controllers
             }
             return RedirectToAction("Index");
         }
-
-        [HttpPost]
-        public ActionResult Add(string action)
+        
+        public ActionResult Add()
         {
             AddViewModel vm = new AddViewModel();
             return View(vm);

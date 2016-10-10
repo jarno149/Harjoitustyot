@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 using SQLite.CodeFirst;
 using System.ComponentModel.DataAnnotations.Schema;
+using MVCHarjoitusTyö.ObjectModels.DTOObjects;
 
 namespace MVCHarjoitusTyö.ObjectModels
 {
@@ -49,17 +50,12 @@ namespace MVCHarjoitusTyö.ObjectModels
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public virtual Address Address { get; set; }
-
-        public Contact()
-        {
-
-        }
         
         public static Contact[] GetAll()
         {
             using (ContactContext cc = new ContactContext())
             {
-                var items = cc.Contacts.ToList().ToArray();
+                var items = cc.Contacts.Include(a => a.Address).ToList().ToArray();
                 return items;
             }
         }
@@ -91,26 +87,28 @@ namespace MVCHarjoitusTyö.ObjectModels
             }
         }
 
-        public static async System.Threading.Tasks.Task<Contact> GetByIdAsync(string id)
+        public static async System.Threading.Tasks.Task<Contact> GetByIdAsync(long id)
         {
-            long lid = long.Parse(id);
             using (ContactContext cc = new ContactContext())
             {
-                Contact c = await cc.Contacts.Include(a => a.Address).FirstOrDefaultAsync(x => x.Id == lid);
+                Contact c = await cc.Contacts.Include(a => a.Address).FirstOrDefaultAsync(x => x.Id == id);
                 return c;
             }
-            return null;
         }
 
-        public static void RemoveById(string id)
+        public static void RemoveById(long id)
         {
-            long lid = long.Parse(id);
             using (ContactContext cc = new ContactContext())
             {
-                Contact c = cc.Contacts.FirstOrDefault(x => x.Id == lid);
+                Contact c = cc.Contacts.FirstOrDefault(x => x.Id == id);
                 cc.Contacts.Remove(c);
                 cc.SaveChanges();
             }
+        }
+
+        public ContactDTO ToDTO()
+        {
+            return new ContactDTO(this);
         }
     }
 
@@ -127,6 +125,11 @@ namespace MVCHarjoitusTyö.ObjectModels
         public Address()
         {
 
+        }
+
+        public AddressDTO ToDTO()
+        {
+            return new AddressDTO(this);
         }
     }
 }
