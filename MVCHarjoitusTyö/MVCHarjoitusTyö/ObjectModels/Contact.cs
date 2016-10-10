@@ -82,6 +82,15 @@ namespace MVCHarjoitusTyö.ObjectModels
             }
         }
 
+        public static void Update(Contact c)
+        {
+            using (ContactContext cc = new ContactContext())
+            {
+                cc.Entry(c).State = EntityState.Modified;
+                cc.SaveChanges();
+            }
+        }
+
         public static async System.Threading.Tasks.Task<Contact> GetByIdAsync(string id)
         {
             long lid = long.Parse(id);

@@ -49,14 +49,30 @@ namespace MVCHarjoitusTyö.Controllers
             return View(vm);
         }
 
+        [HttpPost]
         public ActionResult Update(string action, string id, string firstname, string lastname, string phonenumber, string email, string street, string housenumber, string zip, string country)
         {
             if (action == "Save")
             {
-                return null;
+                Contact c = new Contact
+                {
+                    Id = long.Parse(id),
+                    FirstName = firstname,
+                    LastName = lastname,
+                    PhoneNumber = phonenumber,
+                    Email = email,
+                    Address = new Address
+                    {
+                        ContactId = long.Parse(id),
+                        Street = street,
+                        HouseNumber = housenumber,
+                        ZIP = zip,
+                        Country = country
+                    }
+                };
+                Contact.Update(c);
             }
-            else
-                return RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
