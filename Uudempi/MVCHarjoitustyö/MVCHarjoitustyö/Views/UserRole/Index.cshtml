@@ -1,10 +1,44 @@
-﻿@using MVCHarjoitusTyö.Models
+﻿
+@using MVCHarjoitustyö.Models
+@using MVCHarjoitustyö.ObjectModels
+@model UserRoleViewModel
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-@model = UserRoleViewModel
+<style>
+    td{
+        padding: 6px;
+    }
+    .hoverClass:hover{
+        background-color: #d8e7ff;
+    }
+</style>
 
-<h2>View</h2>
+<h2>Käyttäjäroolit</h2>
 
-<div>
+@using (Html.BeginForm("Create", "UserRole", FormMethod.Post))
+{
+    <table style="width: 100%; margin-top: 40px;">
+        <col width="50" />
+        <col width="300" />
+        <col width="50" />
+        <col width="50" />
+        <tr style="line-height: 40px;">
+            <td><b>ID</b></td>
+            <td><b>Nimi</b></td>
+        </tr>
 
-</div>
+        @for (int i = 0; i < Model.UserRoles.Count; i++)
+        {
+            <tr class="hoverClass">
+                <td>@Model.UserRoles.ElementAt(i).Id</td>
+                <td>@Model.UserRoles.ElementAt(i).Name</td>
+                <td style="text-align: right;">@Html.ActionLink("Muokkaa", "Edit") / @Html.ActionLink("Poista", "Remove")</td>
+            </tr>
+        }
 
+        <input type="submit" value="Lisää uusi" />
+    </table>
+}
