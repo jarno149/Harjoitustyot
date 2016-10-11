@@ -10,9 +10,9 @@ namespace MVCHarjoitustyö.ObjectModels
     public class Note
     {
         public long Id { get; set; }
-        public long UserId { get; set; }
         public string Content { get; set; }
         public byte[] ImageContent { get; set; }
+        public string CreationTimeString { get; set; }
         public virtual ICollection<User> Users { get; set; }
 
         public Image GetImage()

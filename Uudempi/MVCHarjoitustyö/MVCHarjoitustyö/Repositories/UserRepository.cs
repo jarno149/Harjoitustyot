@@ -8,13 +8,13 @@ using System.Linq;
 
 namespace MVCHarjoitustyö.Repositories
 {
-    public class NoteRepository : DbContext
+    public class UserRepository : DbContext
     {
-        public DbSet<Note> Notes { get; set; }
+        public DbSet<User> Users;
 
-        public NoteRepository() : base(new SQLiteConnection { ConnectionString = ConfigurationManager.ConnectionStrings["sqliteConnection"].ConnectionString }, true)
+        public UserRepository() : base(new SQLiteConnection { ConnectionString = ConfigurationManager.ConnectionStrings["sqliteConnection"].ConnectionString }, true)
         {
-            Database.SetInitializer<NoteRepository>(null);
+            Database.SetInitializer<UserRepository>(null);
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -22,14 +22,14 @@ namespace MVCHarjoitustyö.Repositories
             modelBuilder = DatabaseInitializer.InitModelbuilder(modelBuilder);
         }
 
-        public ICollection<Note> GetAll()
+        public ICollection<User> GetAll()
         {
-            return Notes.Include(n => n.Users.Select(u => u.Roles)).ToList();
+            return Users.Include(u => u.Notes).Include(u => u.Roles).ToList();
         }
 
-        public void Store(Note note)
+        public void Store(User user)
         {
-            Notes.Add(note);
+            Users.Add(user);
             this.SaveChanges();
         }
     }
