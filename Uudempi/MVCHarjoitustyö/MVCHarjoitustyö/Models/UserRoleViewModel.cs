@@ -12,10 +12,9 @@ namespace MVCHarjoitustyö.Models
         public ICollection<UserRole> UserRoles { get; set; }
     }
 
-    public class CreateUserRoleViewModel
+    public class RoleInfoViewModel
     {
-        [Required]
-        [Display(Name = "Nimi")]
-        public string Name { get; set; }
+        public UserRole role { get; set; }
+        public ICollection<User> roleUsers { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace MVCHarjoitustyö.Repositories
 {
     public class UserRepository : DbContext
     {
-        public DbSet<User> Users;
+        public DbSet<User> Users { get; set; }
 
         public UserRepository() : base(new SQLiteConnection { ConnectionString = ConfigurationManager.ConnectionStrings["sqliteConnection"].ConnectionString }, true)
         {
@@ -22,9 +22,14 @@ namespace MVCHarjoitustyö.Repositories
             modelBuilder = DatabaseInitializer.InitModelbuilder(modelBuilder);
         }
 
+        public ICollection<User> GetByRoleId(long roleId)
+        {
+            return Users.Where(u => u.RoleIdsString.Contains("-"+roleId+"-")).ToList();
+        }
+
         public ICollection<User> GetAll()
         {
-            return Users.Include(u => u.Notes).Include(u => u.Roles).ToList();
+            return Users.ToList();
         }
 
         public void Store(User user)

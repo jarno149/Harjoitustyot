@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVCHarjoitustyö.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,12 +13,51 @@ namespace MVCHarjoitustyö.ObjectModels
         public string Lastname { get; set; }
         public string UserName { get; set; }
         public string PassWord { get; set; }
-        public virtual ICollection<UserRole> Roles { get; set; }
-        public virtual ICollection<Note> Notes { get; set; }
+        public string RoleIdsString { get; set; }
 
         public string GetFullName()
         {
             return FirstName + " " + Lastname;
+        }
+
+        public void AddRole(UserRole role)
+        {
+            if (this.RoleIdsString != null)
+            {
+                if (this.RoleIdsString.EndsWith("-"))
+                    this.RoleIdsString = this.RoleIdsString.Remove(this.RoleIdsString.Length - 1);
+                this.RoleIdsString += "-" + role + "-";
+            }
+        }
+
+        public void RemoveRole(UserRole role)
+        {
+            if (this.RoleIdsString != null)
+                this.RoleIdsString = this.RoleIdsString.Replace("-" + role.Id + "-", "");
+        }
+
+        public UserRole[] GetRoles()
+        {
+            if (this.RoleIdsString != null)
+            {
+                string[] rs = this.RoleIdsString.Split('-');
+                List<UserRole> roles = new List<UserRole>();
+                using (UserRoleRepository repo = new UserRoleRepository())
+                {
+                    foreach (string splittedPart in rs)
+                    {
+                        long o = 0;
+                        if(long.TryParse(splittedPart, out o))
+                        {
+                            UserRole r = repo.GetById(o);
+                            if (r != null)
+                                roles.Add(r);
+                        }
+                    }
+                    return roles.ToArray();
+                }
+            }
+            return null;
         }
     }
 }

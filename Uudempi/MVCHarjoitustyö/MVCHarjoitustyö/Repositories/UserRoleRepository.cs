@@ -23,9 +23,14 @@ namespace MVCHarjoitustyö.Repositories
             modelBuilder = DatabaseInitializer.InitModelbuilder(modelBuilder);
         }
 
+        public UserRole GetById(long id)
+        {
+            return Roles.Where(r => r.Id == id).FirstOrDefault();
+        }
+
         public ICollection<UserRole> GetAll()
         {
-            return Roles.Include(r => r.Users).ToList();
+            return Roles.ToList();
         }
 
         public void Store(UserRole userRole)

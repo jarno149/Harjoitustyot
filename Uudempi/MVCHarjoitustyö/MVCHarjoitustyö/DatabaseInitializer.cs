@@ -21,32 +21,15 @@ namespace MVCHarjoitustyö
             modelBuilder.Entity<User>().Property(u => u.Lastname).HasColumnName("lastname");
             modelBuilder.Entity<User>().Property(u => u.UserName).HasColumnName("username");
             modelBuilder.Entity<User>().Property(u => u.PassWord).HasColumnName("password");
-
+            modelBuilder.Entity<User>().Property(u => u.RoleIdsString).HasColumnName("roleids");
+            /*
             modelBuilder.Entity<Note>().ToTable("Notes");
             modelBuilder.Entity<Note>().Property(s => s.Id).HasColumnName("id");
             modelBuilder.Entity<Note>().Property(s => s.Content).HasColumnName("content");
             modelBuilder.Entity<Note>().Property(s => s.ImageContent).HasColumnName("imagecontent");
             modelBuilder.Entity<Note>().Property(s => s.CreationTimeString).HasColumnName("creationtime");
-
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Notes)
-                .WithMany(n => n.Users)
-                .Map(m =>
-                {
-                    m.MapLeftKey("UserId");
-                    m.MapRightKey("NoteId");
-                    m.ToTable("UserNotesMappings");
-                });
-
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Roles)
-                .WithMany(r => r.Users)
-                .Map(m =>
-                {
-                    m.MapLeftKey("UserId");
-                    m.MapRightKey("RoleId");
-                    m.ToTable("UserRolesMappings");
-                });
+            */
+          //  modelBuilder.Entity<Note>().HasMany(n => n.Users).WithOptional();
 
             return modelBuilder;
         }

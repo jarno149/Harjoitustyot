@@ -2,6 +2,7 @@
 using MVCHarjoitustyö.ObjectModels;
 using MVCHarjoitustyö.Repositories;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -22,19 +23,17 @@ namespace MVCHarjoitustyö.Controllers
             return View(vm);
         }
 
-        [HttpPost]
-        public ActionResult Create(CreateUserRoleViewModel model)
+        public ActionResult RoleInfo(UserRole role)
         {
-            if (!ModelState.IsValid)
+            if (role.Id == 0 && role.Name == null)
+                return RedirectToAction("Index");
+            RoleInfoViewModel vm = new RoleInfoViewModel();
+            using (UserRepository repo = new UserRepository())
             {
-                CreateUserRoleViewModel vm = new CreateUserRoleViewModel();
-                return View(vm);
+                vm.role = role;
+                vm.roleUsers = repo.GetByRoleId(role.Id);
             }
-            else
-            {
-                new UserRoleRepository().Store(new UserRole { Name = model.Name });
-            }
-            return RedirectToAction("Index");
+            return View(vm);
         }
     }
 }

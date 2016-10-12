@@ -24,7 +24,7 @@ namespace MVCHarjoitustyö.Repositories
 
         public ICollection<Note> GetAll()
         {
-            return Notes.Include(n => n.Users.Select(u => u.Roles)).ToList();
+            return Notes.ToList();
         }
 
         public void Store(Note note)
