@@ -35,5 +35,20 @@ namespace MVCHarjoitustyö.Controllers
             }
             return View(vm);
         }
+
+        public ActionResult RemoveUserRole(long userId, long roleId)
+        {
+            if (userId < 1  && roleId < 1)
+                return RedirectToAction("Index");
+
+            using (UserRepository repo = new UserRepository())
+            {
+                User u = repo.GetById(userId);
+                u.RemoveRole(roleId);
+                repo.Update(u);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

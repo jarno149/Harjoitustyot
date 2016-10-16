@@ -10,14 +10,14 @@ namespace MVCHarjoitustyö.ObjectModels
     {
         public long Id { get; set; }
         public string FirstName { get; set; }
-        public string Lastname { get; set; }
+        public string LastName { get; set; }
         public string UserName { get; set; }
         public string PassWord { get; set; }
         public string RoleIdsString { get; set; }
 
         public string GetFullName()
         {
-            return FirstName + " " + Lastname;
+            return FirstName + " " + LastName;
         }
 
         public void AddRole(UserRole role)
@@ -32,8 +32,13 @@ namespace MVCHarjoitustyö.ObjectModels
 
         public void RemoveRole(UserRole role)
         {
+            RemoveRole(role.Id);
+        }
+
+        public void RemoveRole(long roleId)
+        {
             if (this.RoleIdsString != null)
-                this.RoleIdsString = this.RoleIdsString.Replace("-" + role.Id + "-", "");
+                this.RoleIdsString = this.RoleIdsString.Replace("-" + roleId + "-", "");
         }
 
         public UserRole[] GetRoles()

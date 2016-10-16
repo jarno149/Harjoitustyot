@@ -18,7 +18,7 @@ namespace MVCHarjoitustyö
             modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<User>().Property(u => u.Id).HasColumnName("id");
             modelBuilder.Entity<User>().Property(u => u.FirstName).HasColumnName("firstname");
-            modelBuilder.Entity<User>().Property(u => u.Lastname).HasColumnName("lastname");
+            modelBuilder.Entity<User>().Property(u => u.LastName).HasColumnName("lastname");
             modelBuilder.Entity<User>().Property(u => u.UserName).HasColumnName("username");
             modelBuilder.Entity<User>().Property(u => u.PassWord).HasColumnName("password");
             modelBuilder.Entity<User>().Property(u => u.RoleIdsString).HasColumnName("roleids");

@@ -22,6 +22,17 @@ namespace MVCHarjoitustyö.Repositories
             modelBuilder = DatabaseInitializer.InitModelbuilder(modelBuilder);
         }
 
+        public ICollection<User> Search(string query)
+        {
+            query = query.ToLower();
+            return Users.Where(u => u.FirstName.ToLower().Contains(query) || u.LastName.ToLower().Contains(query) || u.UserName.ToLower().Contains(query)).ToList();
+        }
+
+        public User GetById(long id)
+        {
+            return Users.Where(u => u.Id.Equals(id)).FirstOrDefault();
+        }
+
         public ICollection<User> GetByRoleId(long roleId)
         {
             return Users.Where(u => u.RoleIdsString.Contains("-"+roleId+"-")).ToList();
@@ -30,6 +41,12 @@ namespace MVCHarjoitustyö.Repositories
         public ICollection<User> GetAll()
         {
             return Users.ToList();
+        }
+
+        public void Update(User user)
+        {
+            this.Entry(user).State = EntityState.Modified;
+            this.SaveChanges();
         }
 
         public void Store(User user)

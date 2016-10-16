@@ -6,6 +6,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
 <style>
     td {
         padding: 6px;
@@ -14,60 +16,116 @@
     .hoverClass:hover {
         background-color: #d8e7ff;
     }
+
+    #addSection{
+        height: 200px;
+        margin-top: 30px;
+    }
 </style>
 
 <h2>@Model.role.Name käyttäjät</h2>
 
-@using (Html.BeginForm())
-{
-    <table style="width: 100%; margin-top: 40px;">
-        <col width="50" />
-        <col width="150" />
-        <col width="150" />
-        <col width="150" />
-        <col width="150" />
-        <col width="100" />
-        <tr style="line-height: 40px">
-            <td><b>ID</b></td>
-            <td><b>Etunimi</b></td>
-            <td><b>Sukunimi</b></td>
-            <td><b>Käyttäjänimi</b></td>
-            <td><b>Roolit</b></td>
-        </tr>
-
-        @for (int i = 0; i < Model.roleUsers.Count; i++)
+<div>
+    <div style="height: 80%;">
+        @using (Html.BeginForm())
         {
-            <tr class="hoverClass">
-                <td>@Model.roleUsers.ElementAt(i).Id</td>
-                <td>@{WriteLiteral(Model.roleUsers.ElementAt(i).FirstName != null ? Model.roleUsers.ElementAt(i).FirstName : "-");}</td>
-                <td>@{WriteLiteral(Model.roleUsers.ElementAt(i).Lastname != null ? Model.roleUsers.ElementAt(i).Lastname : "-");}</td>
-                <td>@Model.roleUsers.ElementAt(i).UserName</td>
-                <td>@{
-                    var roles = Model.roleUsers.ElementAt(i).GetRoles();
-                    if (roles != null)
-                    {
-                        for (int j = 0; j < roles.Length; j++)
-                        {
-                            if (j < roles.Length - 1)
-                            {
-                                WriteLiteral(roles[j].Name + "<br>");
+            <table id="userTable" style="width: 100%; margin-top: 40px;">
+                <col width="50" />
+                <col width="150" />
+                <col width="150" />
+                <col width="150" />
+                <col width="150" />
+                <col width="100" />
+                <tr style="line-height: 40px">
+                    <td><b>ID</b></td>
+                    <td><b>Etunimi</b></td>
+                    <td><b>Sukunimi</b></td>
+                    <td><b>Käyttäjänimi</b></td>
+                    <td><b>Roolit</b></td>
+                </tr>
+
+                @for (int i = 0; i < Model.roleUsers.Count; i++)
+                {
+                    <tr class="hoverClass">
+                        <td>@Model.roleUsers.ElementAt(i).Id</td>
+                        <td>@{WriteLiteral(Model.roleUsers.ElementAt(i).FirstName != null ? Model.roleUsers.ElementAt(i).FirstName : "-");}</td>
+                        <td>@{WriteLiteral(Model.roleUsers.ElementAt(i).LastName != null ? Model.roleUsers.ElementAt(i).LastName : "-");}</td>
+                        <td>@Model.roleUsers.ElementAt(i).UserName</td>
+                        <td>
+                            @{
+                                var roles = Model.roleUsers.ElementAt(i).GetRoles();
+                                if (roles != null)
+                                {
+                                    for (int j = 0; j < roles.Length; j++)
+                                    {
+                                        if (j < roles.Length - 1)
+                                        {
+                                            WriteLiteral(roles[j].Name + "<br>");
+                                        }
+                                        else
+                                        {
+                                            WriteLiteral(roles[j].Name);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    WriteLiteral("-");
+                                }
                             }
-                            else
-                            {
-                                WriteLiteral(roles[j].Name);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        WriteLiteral("-");
-                    }
+                        </td>
+                        <td>@Html.ActionLink("Poista", "RemoveUserRole", new { userId = Model.roleUsers.ElementAt(i).Id, roleId = Model.role.Id })</td>
+                    </tr>
+            }
+            </table>
+            <button style="margin-top: 30px;" onclick="location.href='@Url.Action("AddRoleToUser", "UserRole")';return false;">Lisää käyttäjiä...</button>
+    }
+    </div>
+    <div id="addSection">
+        <input id="query" style="float: left" type="text" oninput="OnQuery()" />
+        <select id="resultList" size="10" style="width: 300px; height: 200px; margin-left: 50px;" multiple ondblclick="addUser(this.value)"></select>
+    </div>
+            <button onclick="AnimateAddSection()" style="margin-top: 30px;">TESTINAPPI!...</button>
+</div>
+
+<script>
+        function OnQuery()
+        {
+            document.getElementById("resultList").innerHTML = "";
+            var text = document.getElementById("query").value;
+            $.getJSON("/user/searchUsers?query=" + text, function (result) {
+                for(var i = 0; result.length > i; i++)
+                {
+                    console.log(result[i]);
+                    document.getElementById("resultList").innerHTML += "<option>" + result[i]["Id"] + "    " + result[i]["FirstName"] + " " + result[i]["LastName"];
                 }
-                </td>
-            </tr>
+            });
         }
-    </table>
-    <button style="margin-top: 30px;" onclick="location.href='@Url.Action("AddRoleToUser", "UserRole")';return false;">Lisää käyttäjiä...</button>
-}
+
+        function addUser(userString)
+        {
+            var id = userString.split(" ")[0];
+            $.ajax({url: "/user/adduserrole?userid=" + id + "&roleid=" + @Model.role.Id});
+            $.getJSON("/user/getuserbyid?id=" + id, function(result){
+                document.getElementById("userTable").innerHTML += '<tr class="hoverClass"><td>' + id + '</td><td>' + result["FirstName"] + '</td><td>'
+                + result["LastName"] + '</td><td>' + result["UserName"] + '</td>';
+            });
+            
+        }
+
+        function listUsers(response)
+        {
+            $.each(response, function (i, field) {
+                alert(field + " ");
+            });
+        }
+
+        function AnimateAddSection()
+        {
+            console.log("asdasd");
+            $("#addSection").animate({ left: '250px' });
+        }
+
+</script>
 
 

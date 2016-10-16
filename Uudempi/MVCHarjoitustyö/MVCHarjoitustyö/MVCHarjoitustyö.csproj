@@ -210,6 +210,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
     <Compile Include="DatabaseInitializer.cs" />
     <Compile Include="Global.asax.cs">
@@ -292,7 +293,9 @@
     <Content Include="Views\UserRole\index.cshtml" />
     <Content Include="Views\UserRole\RoleInfo.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\User\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
