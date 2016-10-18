@@ -45,7 +45,8 @@ namespace MVCHarjoitustyö.Repositories
 
         public void Update(User user)
         {
-            this.Entry(user).State = EntityState.Modified;
+            var u = Users.Where(x => x.Id == user.Id).FirstOrDefault();
+            u = user;
             this.SaveChanges();
         }
 

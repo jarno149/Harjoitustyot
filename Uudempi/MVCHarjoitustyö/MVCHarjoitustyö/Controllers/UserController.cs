@@ -1,4 +1,5 @@
-﻿using MVCHarjoitustyö.ObjectModels;
+﻿using MVCHarjoitustyö.Models;
+using MVCHarjoitustyö.ObjectModels;
 using MVCHarjoitustyö.Repositories;
 using Newtonsoft.Json;
 using System;
@@ -36,10 +37,54 @@ namespace MVCHarjoitustyö.Controllers
             {
                 return JsonConvert.SerializeObject(repo.GetById(id));
             }
-            return null;
         }
 
-        public void AddUserRole(long userId, long roleId)
+        public ActionResult AddUser()
+        {
+            AddUserViewModel vm = new AddUserViewModel();
+            using (UserRoleRepository repo = new UserRoleRepository())
+            {
+                vm.Roles = repo.GetAll().ToList();
+            }
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult AddUser(string firstName, string lastName, string passWord, string[] roles)
+        {
+            if (firstName == null || lastName == null || User == null || passWord == null)
+                return RedirectToAction("Index", "UserRole");
+            
+            var u = new User { FirstName = firstName, LastName = lastName, PassWord = passWord };
+            string userName = "";
+            if (firstName.Length > 3)
+                userName = firstName.Substring(0, 3);
+            else
+                userName = firstName;
+            if (lastName.Length > 5)
+                userName += lastName.Substring(0, 5);
+            else
+                userName += lastName;
+            u.UserName = userName;
+            string roleString = "";
+            if (roles != null)
+            {
+                foreach (var s in roles)
+                {
+                    roleString += "-" + s;
+                }
+                roleString += "-";
+                u.RoleIdsString = roleString;
+            }
+            using (UserRepository repo = new UserRepository())
+            {
+                repo.Store(u);
+            }
+
+            return RedirectToAction("Index", "UserRole");
+        }
+
+        public string AddUserRole(long userId, long roleId)
         {
             using (UserRepository repo = new UserRepository())
             {
@@ -47,8 +92,11 @@ namespace MVCHarjoitustyö.Controllers
                 using (UserRoleRepository repo2 = new UserRoleRepository())
                 {
                     var r = repo2.GetById(roleId);
-                    u.AddRole(r);
+                    bool success = u.AddRole(r);
                     repo.Update(u);
+                    if (!success)
+                        return "";
+                    else return JsonConvert.SerializeObject(u);
                 }
             }
         }

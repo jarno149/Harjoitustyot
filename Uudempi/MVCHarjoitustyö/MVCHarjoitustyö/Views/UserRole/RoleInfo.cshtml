@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
 
 <style>
     td {
@@ -18,8 +18,9 @@
     }
 
     #addSection{
-        height: 200px;
+        height: 0px;
         margin-top: 30px;
+        overflow: hidden;
     }
 </style>
 
@@ -74,18 +75,18 @@
                                 }
                             }
                         </td>
-                        <td>@Html.ActionLink("Poista", "RemoveUserRole", new { userId = Model.roleUsers.ElementAt(i).Id, roleId = Model.role.Id })</td>
+                        <td><a href="#" onclick="removeUser(@Model.roleUsers.ElementAt(i).Id)">Poista</a></td>
                     </tr>
             }
             </table>
-            <button style="margin-top: 30px;" onclick="location.href='@Url.Action("AddRoleToUser", "UserRole")';return false;">Lisää käyttäjiä...</button>
     }
     </div>
+    <button id="addUsersBtn" style="margin-top: 10px; width: 130px;" onclick="AnimateAddSection()">Lisää käyttäjiä...</button>
     <div id="addSection">
-        <input id="query" style="float: left" type="text" oninput="OnQuery()" />
+        <input id="query" style="float: left" type="text" oninput="OnQuery()" placeholder="Hae käyttäjiä..." />
         <select id="resultList" size="10" style="width: 300px; height: 200px; margin-left: 50px;" multiple ondblclick="addUser(this.value)"></select>
     </div>
-            <button onclick="AnimateAddSection()" style="margin-top: 30px;">TESTINAPPI!...</button>
+    
 </div>
 
 <script>
@@ -102,28 +103,45 @@
             });
         }
 
+        function removeUser(userId)
+        {
+            $.ajax({url: "/userrole/removeuserrole?userId=" + userId + "&roleId=" + @Model.role.Id, success: function(result)
+            {
+                $.getJSON("/userrole/roleusers?roleid=" + @Model.role.Id, function(result){
+                    var table = document.getElementById("userTable");
+                    table.innerHTML = "";
+                    for(var i = 0; result.length > i; i++)
+                    {
+                        console.log(result[i]);
+                        table.innerHTML += '<tr class="hoverClass"><td>' + result[i]["Id"] + '</td><td>' + result[i]["FirstName"] + '</td><td>'
+                            + result[i]["LastName"] + '</td><td>' + result[i]["UserName"] + '</td><td></td><td><a href="/UserRole/RemoveUserRole?userId=' + result[i]["Id"] +'&roleId=1">Poista</a>';
+                    }
+                });
+            }});
+        }
+
         function addUser(userString)
         {
             var id = userString.split(" ")[0];
-            $.ajax({url: "/user/adduserrole?userid=" + id + "&roleid=" + @Model.role.Id});
-            $.getJSON("/user/getuserbyid?id=" + id, function(result){
+            $.getJSON("/user/adduserrole?userid=" + id + "&roleid=" + @Model.role.Id, function(result){
                 document.getElementById("userTable").innerHTML += '<tr class="hoverClass"><td>' + id + '</td><td>' + result["FirstName"] + '</td><td>'
-                + result["LastName"] + '</td><td>' + result["UserName"] + '</td>';
-            });
-            
-        }
-
-        function listUsers(response)
-        {
-            $.each(response, function (i, field) {
-                alert(field + " ");
+                + result["LastName"] + '</td><td>' + result["UserName"] + '</td><td></td><td><a href="/UserRole/RemoveUserRole?userId=' + result["Id"] +'&roleId=1">Poista</a>';
             });
         }
 
         function AnimateAddSection()
         {
-            console.log("asdasd");
-            $("#addSection").animate({ left: '250px' });
+            if($("#addSection").height() == 0)
+            {
+                $("#addSection").animate({ height: "220px" });
+                document.getElementById("addUsersBtn").innerHTML = "Piilota";
+                document.getElementById("query").focus();
+            }
+            else
+            {
+                $("#addSection").animate({ height: "0px" });
+                document.getElementById("addUsersBtn").innerHTML = "Lisää käyttäjiä...";
+            }
         }
 
 </script>

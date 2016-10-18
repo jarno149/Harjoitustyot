@@ -1,6 +1,7 @@
 ﻿using MVCHarjoitustyö.Models;
 using MVCHarjoitustyö.ObjectModels;
 using MVCHarjoitustyö.Repositories;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,6 +50,15 @@ namespace MVCHarjoitustyö.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        public string RoleUsers(long roleId)
+        {
+            using (UserRepository repo = new UserRepository())
+            {
+                List<User> users = repo.GetByRoleId(roleId).ToList();
+                return JsonConvert.SerializeObject(users);
+            }
         }
     }
 }

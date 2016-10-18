@@ -20,14 +20,26 @@ namespace MVCHarjoitustyö.ObjectModels
             return FirstName + " " + LastName;
         }
 
-        public void AddRole(UserRole role)
+        public bool AddRole(UserRole role)
         {
-            if (this.RoleIdsString != null)
+            return AddRole(role.Id);
+        }
+
+        public bool AddRole(long roleId)
+        {
+            if(this.RoleIdsString != null && !this.RoleIdsString.Contains("-" + roleId + "-"))
             {
                 if (this.RoleIdsString.EndsWith("-"))
                     this.RoleIdsString = this.RoleIdsString.Remove(this.RoleIdsString.Length - 1);
-                this.RoleIdsString += "-" + role + "-";
+                this.RoleIdsString += "-" + roleId + "-";
+                return true;
             }
+            else
+            {
+                this.RoleIdsString = "-" + roleId + "-";
+                return true;
+            }
+            return false;
         }
 
         public void RemoveRole(UserRole role)

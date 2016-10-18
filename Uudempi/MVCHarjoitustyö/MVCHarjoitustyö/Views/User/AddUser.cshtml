@@ -1,0 +1,100 @@
+﻿@using MVCHarjoitustyö.Models
+@using MVCHarjoitustyö.ObjectModels
+@model AddUserViewModel
+@{
+    ViewBag.Title = "AddUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AddUser</h2>
+
+@using (Html.BeginForm("AddUser", "User", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <td>Etunimi:</td>
+            <td colspan="2"><input type="text" id="fn" name="firstName" /></td>
+        </tr>
+        <tr>
+            <td>Sukunimi:</td>
+            <td colspan="2"><input type="text" id="ln" name="lastName" /></td>
+        </tr>
+        <tr>
+            <td>Salasana:</td>
+            <td colspan="2"><input type="password" id="p1" name="passWord" /></td>
+        </tr>
+        <tr>
+            <td>Salanan tarkitus:</td>
+            <td colspan="2"><input type="password" id="p2" name="passWord2" /></td>
+        </tr>
+        <tr><td></td></tr>
+        @for (int i = 0; i < Model.Roles.Count; i++)
+        {
+            if (i % 2 == 0)
+            {
+                WriteLiteral("<tr>");
+                if (i != 0)
+                {
+                    WriteLiteral("<td></td>");
+                }
+            }
+            if (i == 0)
+            {
+                WriteLiteral("<td>Roolit:</td>");
+            }
+            <td><input type="checkbox" value="@Model.Roles[i].Id" name="roles" />@Model.Roles[i].Name</td>
+            if (i % 2 != 0)
+            {
+                WriteLiteral("</tr>");
+            }
+        }
+    </table>
+}
+
+    <button onclick="CheckInputs()">Tallenna</button>
+
+    <script>
+        function CheckInputs()
+        {
+            if(CheckPasswords())
+            {
+                CheckAllFields();
+            }
+        }
+
+        function CheckPasswords()
+        {
+            var pass1 = document.getElementById("p1");
+            var pass2 = document.getElementById("p2");
+            console.log(pass1.value);
+            if (pass1.value != pass2.value){
+                alert("Salasanat eivät täsmää!");
+                return false;
+            }
+            else if (pass1.value == "" || pass2.value == "") {
+                alert("Salasanaa ei ole syötetty!");
+                return false;
+            }
+            return true;
+        }
+
+        function CheckAllFields()
+        {
+            var fn = document.getElementById("fn").value;
+            var ln = document.getElementById("ln").value;
+
+            if (fn == "") {
+                alert("Etunimeä ei ole syötetty!");
+                return;
+            }
+            else if (ln == "") {
+                alert("Sukunimeä ei ole syötetty!");
+                return;
+            }
+
+            document.forms[0].submit();
+        }
+        
+    </script>
+}
+
