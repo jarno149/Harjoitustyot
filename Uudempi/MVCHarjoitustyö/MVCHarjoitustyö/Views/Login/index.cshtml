@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Login</h2>
+
+<form method="post" action="/login/login">
+    <table>
+        <col width="150" />
+        <col width="250" />
+        <tr>
+            <td>Käyttäjänimi:</td>
+            <td><input type="text" name="username" /></td>
+        </tr>
+        <tr>
+            <td>Salasana:</td>
+            <td><input type="password" name="password" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Kirjaudu" /></td>
+        </tr>
+    </table>
+</form>
+

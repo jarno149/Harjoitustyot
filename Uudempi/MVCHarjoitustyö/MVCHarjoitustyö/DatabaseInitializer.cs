@@ -22,14 +22,15 @@ namespace MVCHarjoitustyö
             modelBuilder.Entity<User>().Property(u => u.UserName).HasColumnName("username");
             modelBuilder.Entity<User>().Property(u => u.PassWord).HasColumnName("password");
             modelBuilder.Entity<User>().Property(u => u.RoleIdsString).HasColumnName("roleids");
-            /*
+            
+
             modelBuilder.Entity<Note>().ToTable("Notes");
             modelBuilder.Entity<Note>().Property(s => s.Id).HasColumnName("id");
             modelBuilder.Entity<Note>().Property(s => s.Content).HasColumnName("content");
             modelBuilder.Entity<Note>().Property(s => s.ImageContent).HasColumnName("imagecontent");
             modelBuilder.Entity<Note>().Property(s => s.CreationTimeString).HasColumnName("creationtime");
-            */
-          //  modelBuilder.Entity<Note>().HasMany(n => n.Users).WithOptional();
+            modelBuilder.Entity<Note>().Property(s => s.UserIdString).HasColumnName("userids");
+
 
             return modelBuilder;
         }

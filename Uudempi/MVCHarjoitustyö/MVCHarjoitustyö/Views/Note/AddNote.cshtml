@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "AddNote";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <h2>AddNote</h2>
+
+<style>
+    #canvas:hover{
+        cursor:crosshair;
+    }
+</style>
+
+<div>
+    <canvas onload="init()" id="canvas" width="500" height="400" style="border: 1px solid black;"></canvas>
+    <button onclick="clearCanvas()">Tyhjää</button>
+    <ul style="float: right;">
+        <button style="width: 200px; height: 23px;" onclick="saveImage()">Tallenna</button>
+        <input id="queryTb" type="text" style="width: 200px;" oninput="OnQuery()" />
+        <select id="resultList" size="10" style="height: 200px; width: 200px;" ondblclick="addUser(this.value)" multiple></select>
+    </ul>
+</div>
+<table id="userTable" style="border: 1px solid black;">
+    <tr><td>Käyttäjät</td></tr>
+</table>
+
+
+@using (Html.BeginForm("addnote", "note", FormMethod.Post, new { id = "postForm" }))
+{
+    <input id="imgData" type="hidden" name="imgData" />
+}
+
+<script type="text/javascript">
+    window.onload = init();
+
+    var canvas, context;
+    var prevX = 0;
+    var prevY = 0;
+    var color = "black";
+    var lineWidth = 2;
+    var mouseDown = false;
+
+    function saveImage()
+    {
+        var dataUrl = canvas.toDataURL();
+        document.getElementById("imgData").value = dataUrl;
+        document.forms["postForm"].submit();
+    }
+
+    function addUser(userstring)
+    {
+        var id = userstring.split(" ")[0].trim();
+        document.getElementById("postForm").innerHTML += '<input type="hidden" value="' + id + '" name="userIds" />';
+
+        document.getElementById("userTable").innerHTML += "<tr><td>" + userstring.substring(userstring.indexOf(" ") + 1) + "</td></tr>";
+    }
+
+    function init()
+    {
+        canvas = document.getElementById("canvas");
+        context = canvas.getContext("2d");
+
+        canvas.addEventListener("mousemove", function (e) { mouseMove(e.clientX, e.clientY) }, false);
+        canvas.addEventListener("mousedown", function (e) { mouseDown = true; prevX = e.clientX; prevY = e.clientY; });
+        canvas.addEventListener("mouseup", function (e) { mouseDown = false; prevX = 0; prevX = 0; });
+        canvas.addEventListener("mouseout", function (e) { mouseDown = false; prevX = 0; prevY = 0; });
+    }
+
+    function mouseMove(currX, currY)
+    {
+        if (mouseDown && prevX > 0 && prevY > 0)
+        {
+            context.beginPath();
+            context.moveTo(prevX - canvas.offsetLeft, prevY - canvas.offsetTop);
+            context.lineTo(currX - canvas.offsetLeft, currY - canvas.offsetTop);
+            context.strokeStyle = color;
+            context.lineWidth = lineWidth;
+            context.stroke();
+            context.closePath();
+            prevX = currX;
+            prevY = currY;
+        }
+    }
+
+    function clearCanvas()
+    {
+        var c = confirm("Halutako varmasti tyhjätä muistilapun?");
+        if(c)
+        {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+
+    function OnQuery()
+    {
+        document.getElementById("resultList").innerHTML = "";
+        var text = document.getElementById("queryTb").value;
+        $.getJSON("/user/searchUsers?query=" + text, function (result) {
+            for(var i = 0; result.length > i; i++)
+            {
+                console.log(result[i]);
+                document.getElementById("resultList").innerHTML += "<option>" + result[i]["Id"] + "   " + result[i]["FirstName"] + " " + result[i]["LastName"];
+            }
+        });
+    }
+
+</script>

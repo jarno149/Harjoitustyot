@@ -43,6 +43,11 @@ namespace MVCHarjoitustyö.Repositories
             return Users.ToList();
         }
 
+        public User GetByUsername(string username)
+        {
+            return Users.Where(x => x.UserName == username).FirstOrDefault();
+        }
+
         public void Update(User user)
         {
             var u = Users.Where(x => x.Id == user.Id).FirstOrDefault();
@@ -54,6 +59,14 @@ namespace MVCHarjoitustyö.Repositories
         {
             Users.Add(user);
             this.SaveChanges();
+        }
+
+        public bool IsValid(string username, string password)
+        {
+            var user = Users.Where(x => x.UserName == username && x.PassWord == password).FirstOrDefault();
+            if (user == null)
+                return false;
+            return true;
         }
     }
 }

@@ -13,11 +13,13 @@ namespace MVCHarjoitustyö.Controllers
     public class UserController : Controller
     {
         // GET: User
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
 
+        [Authorize]
         public string SearchUsers(string query)
         {
             var users = new List<User>();
@@ -31,6 +33,7 @@ namespace MVCHarjoitustyö.Controllers
             return JsonConvert.SerializeObject(users.ToArray());
         }
 
+        [Authorize]
         public string GetUserById(long id)
         {
             using (UserRepository repo = new UserRepository())
@@ -39,6 +42,7 @@ namespace MVCHarjoitustyö.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult AddUser()
         {
             AddUserViewModel vm = new AddUserViewModel();
@@ -49,6 +53,7 @@ namespace MVCHarjoitustyö.Controllers
             return View(vm);
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult AddUser(string firstName, string lastName, string passWord, string[] roles)
         {
@@ -84,6 +89,7 @@ namespace MVCHarjoitustyö.Controllers
             return RedirectToAction("Index", "UserRole");
         }
 
+        [Authorize]
         public string AddUserRole(long userId, long roleId)
         {
             using (UserRepository repo = new UserRepository())

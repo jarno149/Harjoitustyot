@@ -13,7 +13,7 @@ namespace MVCHarjoitustyö.ObjectModels
         public string Content { get; set; }
         public byte[] ImageContent { get; set; }
         public string CreationTimeString { get; set; }
-        public ICollection<User> Users { get; set; }
+        public string UserIdString { get; set; }
 
         public Image GetImage()
         {

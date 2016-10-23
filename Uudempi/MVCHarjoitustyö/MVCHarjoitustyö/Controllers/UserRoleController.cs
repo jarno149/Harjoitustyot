@@ -14,6 +14,7 @@ namespace MVCHarjoitustyö.Controllers
     public class UserRoleController : Controller
     {
         // GET: UserRole
+        [Authorize]
         public ActionResult Index()
         {
             UserRoleViewModel vm = new UserRoleViewModel();
@@ -24,6 +25,7 @@ namespace MVCHarjoitustyö.Controllers
             return View(vm);
         }
 
+        [Authorize]
         public ActionResult RoleInfo(UserRole role)
         {
             if (role.Id == 0 && role.Name == null)
@@ -37,6 +39,7 @@ namespace MVCHarjoitustyö.Controllers
             return View(vm);
         }
 
+        [Authorize]
         public ActionResult RemoveUserRole(long userId, long roleId)
         {
             if (userId < 1  && roleId < 1)
@@ -52,6 +55,7 @@ namespace MVCHarjoitustyö.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         public string RoleUsers(long roleId)
         {
             using (UserRepository repo = new UserRepository())

@@ -27,8 +27,14 @@ namespace MVCHarjoitustyö.Repositories
             return Notes.ToList();
         }
 
+        public ICollection<Note> GetByUserId(long userId)
+        {
+            return Notes.Where(x => x.UserIdString.Contains("-" + userId + "-")).ToList();
+        }
+
         public void Store(Note note)
         {
+            note.CreationTimeString = DateTime.Now.ToShortDateString();
             Notes.Add(note);
             this.SaveChanges();
         }
